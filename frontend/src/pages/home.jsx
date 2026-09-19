@@ -23,7 +23,11 @@ function HomeComponent() {
           <h2>Meetora</h2>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              navigate("/history");
+            }}
+          >
             <RestoreIcon />
           </IconButton>
           <p>history</p>
