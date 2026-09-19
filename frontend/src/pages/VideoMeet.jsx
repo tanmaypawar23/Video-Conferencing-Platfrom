@@ -11,6 +11,7 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
 import ChatIcon from "@mui/icons-material/Chat";
+import { useNavigate } from "react-router-dom";
 
 const server_url = "http://localhost:8000";
 var connections = {};
@@ -458,7 +459,7 @@ export default function VideoMeetComponent() {
 
   let handleEndCall = () => {
     try {
-      let tracks = localVideoRef.current.srcObject.getTrack();
+      let tracks = localVideoRef.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
     } catch (e) {}
     routeTo("/home");
