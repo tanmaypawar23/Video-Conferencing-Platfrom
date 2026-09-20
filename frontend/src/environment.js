@@ -1,5 +1,4 @@
-let IS_PROD = true;
-const server = IS_PROD
+const server = import.meta.env.PROD
   ? "https://video-conferencing-platfrom.onrender.com"
   : "http://localhost:8000";
 

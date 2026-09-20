@@ -11,7 +11,7 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import StopScreenShareIcon from "@mui/icons-material/StopScreenShare";
 import ChatIcon from "@mui/icons-material/Chat";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import server from "../environment";
 
 const server_url = server;
@@ -22,6 +22,7 @@ const peerConfigConnections = {
 };
 
 export default function VideoMeetComponent() {
+  const { url } = useParams();
   var socketRef = useRef();
   let socketIdRef = useRef();
 
@@ -32,11 +33,11 @@ export default function VideoMeetComponent() {
   let [video, setVideo] = useState(true);
   let [audio, setAudio] = useState();
   let [screen, setScreen] = useState();
-  let [showModel, setModel] = useState(true);
+  let [showModel, setModel] = useState(false);
   let [screenAvailable, setScreenAvailable] = useState();
   let [messages, setMessages] = useState([]);
   let [message, setMessage] = useState("");
-  let [newMessages, setNewMessages] = useState(1);
+  let [newMessages, setNewMessages] = useState(0);
   let [askForUsername, setAskForUsername] = useState(true);
   let [username, setUsername] = useState("");
   const videoRef = useRef([]);
@@ -261,7 +262,7 @@ export default function VideoMeetComponent() {
     socketRef.current.on("signal", gotMessageFromServer);
 
     socketRef.current.on("connect", () => {
-      socketRef.current.emit("join-call", window.location.href);
+      socketRef.current.emit("join-call", url);
 
       socketIdRef.current = socketRef.current.id;
 
@@ -454,6 +455,7 @@ export default function VideoMeetComponent() {
   };
 
   let sendMessage = () => {
+    if (message.trim() === "") return;
     socketRef.current.emit("chat-message", message, username);
     setMessage("");
   };
@@ -509,8 +511,11 @@ export default function VideoMeetComponent() {
                   <TextField
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") sendMessage();
+                    }}
                     id="outlined-basic"
-                    label="Outlined"
+                    label="Type a message"
                     variant="outlined"
                   />
                   <Button variant="contained" onClick={sendMessage}>
@@ -547,7 +552,10 @@ export default function VideoMeetComponent() {
 
             <Badge badgeContent={newMessages} max={999} color="secondary">
               <IconButton
-                onClick={() => setModel(!showModel)}
+                onClick={() => {
+                  setModel(!showModel);
+                  setNewMessages(0);
+                }}
                 style={{ color: "white" }}
               >
                 <ChatIcon />

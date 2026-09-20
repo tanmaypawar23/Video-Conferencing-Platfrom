@@ -6,16 +6,35 @@ import { Button, IconButton, TextField } from "@mui/material";
 import RestoreIcon from "@mui/icons-material/Restore";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 function HomeComponent() {
   let navigate = useNavigate();
   const [meetingCode, setMeetingCode] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const { addToUserHistory } = useContext(AuthContext);
+
   let handleJoinVideoCall = async () => {
-    await addToUserHistory(meetingCode);
-    navigate(`/${meetingCode}`);
+    const code = meetingCode.trim();
+
+    if (code === "") {
+      setShowAlert(true);
+      return;
+    }
+
+    setShowAlert(false);
+
+    try {
+      await addToUserHistory(code);
+    } catch (e) {
+      console.log("Could not save history", e);
+    }
+
+    navigate(`/${code}`);
   };
+
   return (
     <>
       <div className="navBar">
@@ -42,6 +61,23 @@ function HomeComponent() {
           </Button>
         </div>
       </div>
+
+      <Snackbar
+        open={showAlert}
+        autoHideDuration={3000}
+        onClose={() => setShowAlert(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          variant="filled"
+          severity="warning"
+          onClose={() => setShowAlert(false)}
+          sx={{ width: "100%" }}
+        >
+          Please enter a meeting code first!
+        </Alert>
+      </Snackbar>
+
       <div className="meetContainer">
         <div className="leftPanel">
           <div>
