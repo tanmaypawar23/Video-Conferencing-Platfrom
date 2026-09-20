@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import withAuth from "../utils/withAuth";
 import "../App.css";
 import { Button, IconButton, TextField } from "@mui/material";
@@ -11,6 +11,17 @@ import Snackbar from "@mui/material/Snackbar";
 
 function HomeComponent() {
   let navigate = useNavigate();
+  const location = useLocation();
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.loginSuccess) {
+      setShowLoginAlert(true);
+      // remove the sticky note so the alert doesn't appear again on refresh
+      navigate("/home", { replace: true, state: null });
+    }
+  }, []);
+
   const [meetingCode, setMeetingCode] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
@@ -61,6 +72,22 @@ function HomeComponent() {
           </Button>
         </div>
       </div>
+
+      <Snackbar
+        open={showLoginAlert}
+        autoHideDuration={3000}
+        onClose={() => setShowLoginAlert(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          variant="filled"
+          severity="success"
+          onClose={() => setShowLoginAlert(false)}
+          sx={{ width: "100%" }}
+        >
+          Login successfully!
+        </Alert>
+      </Snackbar>
 
       <Snackbar
         open={showAlert}

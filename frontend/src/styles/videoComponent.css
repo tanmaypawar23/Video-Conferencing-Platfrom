@@ -35,7 +35,7 @@
   margin: 0 0.5rem;
 }
 
-.chatRoom {
+/* .chatRoom {
   position: absolute;
   height: 90vh;
   right: 0;
@@ -54,4 +54,37 @@
 .chattingArea {
   position: absolute;
   bottom: 0;
+} */
+.chatRoom {
+  position: absolute;
+  height: 87vh;
+  right: 0;
+  bottom: 10vh;
+  width: 30vw;
+  background: white;
+  border-radius: 20px;
+  padding-inline: 20px;
+  box-sizing: border-box;
+}
+
+.chatContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chattingDisplay {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.chattingArea {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.chattingArea .MuiTextField-root {
+  flex: 1;
 }

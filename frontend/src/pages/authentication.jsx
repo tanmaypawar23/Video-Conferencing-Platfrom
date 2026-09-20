@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthContext } from "../contexts/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -40,7 +41,7 @@ export default function Authentication() {
         let result = await handleRegister(name, username, password);
         console.log(result);
         setUsername("");
-        setMessage(result);
+        setMessage("Registered successfully! You can login now.");
         setOpen(true);
         setError("");
         setFromState(0);
@@ -168,7 +169,21 @@ export default function Authentication() {
         </Grid>
       </Grid>
 
-      <Snackbar open={open} autoHideDuration={4000} message={message} />
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          variant="filled"
+          severity="success"
+          onClose={() => setOpen(false)}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

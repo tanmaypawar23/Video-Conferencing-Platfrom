@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const authContext = useContext(AuthContext);
 
   const [userData, setUserData] = useState(authContext);
+  const router = useNavigate();
 
   const handleRegister = async (name, username, password) => {
     try {
@@ -39,13 +40,12 @@ export const AuthProvider = ({ children }) => {
 
       if (request.status === 200) {
         localStorage.setItem("token", request.data.token);
+        router("/home", { state: { loginSuccess: true } });
       }
     } catch (error) {
       throw error;
     }
   };
-
-  const router = useNavigate();
 
   const getHistoryOfUser = async () => {
     try {
