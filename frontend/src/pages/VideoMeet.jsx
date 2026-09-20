@@ -460,13 +460,30 @@ export default function VideoMeetComponent() {
     setMessage("");
   };
 
-  let handleEndCall = () => {
+  const cleanupCall = () => {
     try {
-      let tracks = localVideoRef.current.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
-    } catch (e) {}
+      localVideoRef.current?.srcObject
+        ?.getTracks()
+        .forEach((track) => track.stop());
+    } catch (e) {
+      console.log(e);
+    }
+
+    Object.values(connections).forEach((pc) => pc.close());
+
+    connections = {};
+
+    socketRef.current?.disconnect();
+  };
+  let handleEndCall = () => {
+    cleanupCall();
     routeTo("/home");
   };
+  useEffect(() => {
+    return () => {
+      cleanupCall();
+    };
+  }, []);
 
   return (
     <div>
