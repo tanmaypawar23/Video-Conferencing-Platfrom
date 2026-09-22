@@ -9,8 +9,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { IconButton } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
+import withAuth from "../utils/withAuth";
 
-export default function History() {
+function History() {
   const { getHistoryOfUser } = useContext(AuthContext);
   const [meetings, setMeetings] = useState([]);
   const routeTo = useNavigate();
@@ -19,7 +20,7 @@ export default function History() {
     const fetchHistory = async () => {
       try {
         const history = await getHistoryOfUser();
-        setMeetings(history);
+        setMeetings(Array.isArray(history) ? history : []);
       } catch (e) {
         //Implement snackbar
       }
@@ -65,3 +66,5 @@ export default function History() {
     </div>
   );
 }
+
+export default withAuth(History);
