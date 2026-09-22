@@ -15,13 +15,14 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthContext } from "../contexts/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function Authentication() {
-  const [username, setUsername] = React.useState();
-  const [password, setPassword] = React.useState();
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState();
   const [message, setMessage] = React.useState();
   const [name, setName] = React.useState("");
@@ -29,10 +30,13 @@ export default function Authentication() {
   const [fromState, setFromState] = React.useState(0);
 
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
   let handleAuth = async () => {
+    if (loading) return;
+    setLoading(true);
     try {
       if (fromState === 0) {
         let result = await handleLogin(username, password);
@@ -53,6 +57,8 @@ export default function Authentication() {
       const message = error.response?.data?.message || "Something went wrong";
 
       setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,7 +100,7 @@ export default function Authentication() {
             </Avatar>
             <div>
               <Button
-                variant={fromState === 0 ? "contained" : ""}
+                variant={fromState === 0 ? "contained" : "text"}
                 onClick={() => {
                   setFromState(0);
                 }}
@@ -102,7 +108,7 @@ export default function Authentication() {
                 LogIn
               </Button>
               <Button
-                variant={fromState === 1 ? "contained" : ""}
+                variant={fromState === 1 ? "contained" : "text"}
                 onClick={() => {
                   setFromState(1);
                 }}
@@ -114,6 +120,10 @@ export default function Authentication() {
             <Box
               component="form"
               noValidate
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAuth();
+              }}
               sx={{ mt: 1, width: "100%", maxWidth: "600px" }}
             >
               {fromState === 1 ? (
@@ -121,9 +131,9 @@ export default function Authentication() {
                   margin="normal"
                   required
                   fullWidth
-                  id="username"
+                  id="fullname"
                   label="Full Name"
-                  name="username"
+                  name="fullname"
                   value={name}
                   autoFocus
                   onChange={(e) => setName(e.target.value)}
@@ -140,7 +150,6 @@ export default function Authentication() {
                 label="Username"
                 name="username"
                 value={username}
-                autoFocus
                 onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
@@ -156,13 +165,23 @@ export default function Authentication() {
               />
               <p style={{ color: "red" }}>{error}</p>
               <Button
-                type="button"
+                type="submit"
                 fullWidth
                 variant="contained"
+                disabled={loading}
                 sx={{ mt: 3, mb: 2 }}
-                onClick={handleAuth}
               >
-                {fromState === 0 ? "LogIn" : "Register"}
+                {loading ? (
+                  <CircularProgress
+                    size={24}
+                    color="inherit"
+                    aria-label="Loading…"
+                  />
+                ) : fromState === 0 ? (
+                  "LogIn"
+                ) : (
+                  "Register"
+                )}
               </Button>
             </Box>
           </Box>
