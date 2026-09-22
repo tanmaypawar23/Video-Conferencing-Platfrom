@@ -106,7 +106,9 @@ const connectToSocket = (server) => {
 
             if (connections[key].length === 0) {
               delete connections[key];
+              delete messages[key];
             }
+            delete timeOnline[socket.id];
           }
         }
       }
