@@ -16,6 +16,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -171,17 +172,7 @@ export default function Authentication() {
                 disabled={loading}
                 sx={{ mt: 3, mb: 2 }}
               >
-                {loading ? (
-                  <CircularProgress
-                    size={24}
-                    color="inherit"
-                    aria-label="Loading…"
-                  />
-                ) : fromState === 0 ? (
-                  "LogIn"
-                ) : (
-                  "Register"
-                )}
+                {fromState === 0 ? "LogIn" : "Register"}
               </Button>
             </Box>
           </Box>
@@ -203,6 +194,13 @@ export default function Authentication() {
           {message}
         </Alert>
       </Snackbar>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" aria-label="Loading…" />
+      </Backdrop>
     </ThemeProvider>
   );
 }
