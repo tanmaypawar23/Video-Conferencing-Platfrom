@@ -13,7 +13,7 @@ export default function LandingPage() {
         <div className="navlist">
           <p
             onClick={() => {
-              router("/join-as-a-Guest");
+              router(`/meet/${Math.random().toString(36).slice(2, 10)}`);
             }}
           >
             Join as Guest

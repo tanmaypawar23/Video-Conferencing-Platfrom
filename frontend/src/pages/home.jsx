@@ -43,7 +43,7 @@ function HomeComponent() {
       console.log("Could not save history", e);
     }
 
-    navigate(`/${code}`);
+    navigate(`/meet/${encodeURIComponent(code)}`);
   };
 
   return (
