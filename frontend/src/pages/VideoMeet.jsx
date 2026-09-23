@@ -27,6 +27,7 @@ export default function VideoMeetComponent() {
   let socketIdRef = useRef();
 
   let localVideoRef = useRef();
+  const chatDisplayRef = useRef();
 
   let [videoAvailable, setVideoAvailable] = useState(true);
   let [audioAvailable, setAudioAvailable] = useState(true);
@@ -253,13 +254,19 @@ export default function VideoMeetComponent() {
       { sender: sender, data: data },
     ]);
 
-    if (socketIdSender !== socketIdRef.current) {
+    if (socketIdSender !== socketIdRef.current && !showModel) {
       setNewMessages((prevNewMessages) => prevNewMessages + 1);
     }
   };
 
+  useEffect(() => {
+    if (chatDisplayRef.current) {
+      chatDisplayRef.current.scrollTop = chatDisplayRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   let connectToSocketServer = () => {
-    socketRef.current = io.connect(server_url, { secure: false });
+    socketRef.current = io(server_url);
 
     socketRef.current.on("signal", gotMessageFromServer);
 
@@ -502,11 +509,15 @@ export default function VideoMeetComponent() {
             variant="outlined"
             onChange={(e) => setUsername(e.target.value)}
           />
-          <Button variant="contained" onClick={connect}>
+          <Button
+            variant="contained"
+            onClick={connect}
+            disabled={username.trim() === ""}
+          >
             Connect
           </Button>
           <div>
-            <video ref={localVideoRef} autoPlay muted></video>
+            <video ref={localVideoRef} autoPlay muted playsInline></video>
           </div>
         </div>
       ) : (
@@ -515,7 +526,7 @@ export default function VideoMeetComponent() {
             <div className="chatRoom">
               <div className="chatContainer">
                 <h1>Chat</h1>
-                <div className="chattingDisplay">
+                <div className="chattingDisplay" ref={chatDisplayRef}>
                   {messages.length > 0 ? (
                     messages.map((item, index) => {
                       return (
@@ -589,6 +600,7 @@ export default function VideoMeetComponent() {
             ref={localVideoRef}
             autoPlay
             muted
+            playsInline
           ></video>
           <div className="conferenceView">
             {videos.map((video) => (
@@ -601,6 +613,7 @@ export default function VideoMeetComponent() {
                     }
                   }}
                   autoPlay
+                  playsInline
                 ></video>
               </div>
             ))}

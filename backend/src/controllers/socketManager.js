@@ -9,7 +9,10 @@ let timeOnline = {};
 const connectToSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: [
+        "https://video-conferencing-platfrom-wp9l.onrender.com",
+        "http://localhost:5173",
+      ],
       methods: ["GET", "POST"],
       allowedHeaders: ["*"],
       credentials: true,
