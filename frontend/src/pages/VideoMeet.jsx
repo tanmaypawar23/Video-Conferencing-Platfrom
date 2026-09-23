@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge, IconButton, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { io } from "socket.io-client";
@@ -199,7 +199,7 @@ export default function VideoMeetComponent() {
       try {
         let tracks = localVideoRef.current.srcObject.getTracks();
         tracks.forEach((track) => track.stop());
-      } catch (e) {}
+      } catch {}
     }
   };
   useEffect(() => {
@@ -450,7 +450,7 @@ export default function VideoMeetComponent() {
         navigator.mediaDevices
           .getDisplayMedia({ video: true, audio: true })
           .then(getDisplayMediaSuccess)
-          .then((stream) => {})
+          .then(() => {})
           .catch((e) => console.log(e));
       }
     }

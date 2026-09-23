@@ -1,7 +1,7 @@
 .landingPageConatiner {
   width: 100vw;
   height: 100vh;
-  background: url("/background.png");
+  background-color: rgb(0, 0, 0);
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
@@ -37,7 +37,7 @@
   font-size: 2rem;
 }
 .landingMainContainer > div:nth-child(1) div[role="button"] {
-  background-color: #d97500;
+  background-color: #168bff;
   width: fit-content;
   padding: 1rem;
   border-radius: 2rem;
@@ -61,6 +61,17 @@
   padding-inline: 20px;
   align-items: center;
   text-align: center;
+}
+.navHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.navHeader img {
+  object-fit: contain;
+}
+.navHeader h2 {
+  margin: 0;
 }
 
 .meetContainer {

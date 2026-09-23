@@ -40,7 +40,7 @@ export default function Authentication() {
     setLoading(true);
     try {
       if (fromState === 0) {
-        let result = await handleLogin(username, password);
+        await handleLogin(username, password);
       }
       if (fromState === 1) {
         let result = await handleRegister(name, username, password);

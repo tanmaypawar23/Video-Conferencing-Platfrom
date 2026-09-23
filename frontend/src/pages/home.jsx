@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import withAuth from "../utils/withAuth";
 import "../App.css";
@@ -112,8 +112,13 @@ function HomeComponent() {
             <div style={{ display: "flex", gap: "10px" }}>
               <TextField
                 onChange={(e) => setMeetingCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleJoinVideoCall();
+                  }
+                }}
                 id="outlined-basic"
-                label="Meeeting Code"
+                label="Meeting Code"
                 variant="outlined"
               ></TextField>
               <Button onClick={handleJoinVideoCall} variant="contained">
@@ -123,7 +128,7 @@ function HomeComponent() {
           </div>
         </div>
         <div className="rightPanel">
-          <img srcSet="/logo5.png" alt="" />
+          <img src="/logo5.png" alt="" />
         </div>
       </div>
     </>
